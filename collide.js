@@ -14,11 +14,11 @@ var mouse = {
 var maxRadius = 40;
 
 var colorArray = [
-    '#ffaa33',
-    '#99fffaaa',
-    '#00ff00',
-    '#4411aa',
-    '#ff1100'
+    '#145DA0',
+    '#0C2D48',
+    '#2E8BC0',
+    '#B1D4E0',
+    '#050A30'
 ];
 
 var gravity = 1;
@@ -120,11 +120,12 @@ function Particles(x, y, radius) {
     this.y = y;
     this.radius = radius;
     this.velocity = {
-        x: Math.random() - 0.5,
-        y: Math.random() - 0.5
+        x: (Math.random() - 0.5) * 2,
+        y: (Math.random() - 0.5) * 2
     };
     this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
     this.mass = 1;
+    this.opacity = 0;
 
 
     this.update = particles => {
@@ -135,10 +136,23 @@ function Particles(x, y, radius) {
             if (getDistance(this.x, this.y, particles[i].x, particles[i].y) - this.radius * 2 < 0) {
 
                 resolveCollision(this, particles[i]);
-                console.log('has collided');
             }
         }
+        if (this.x - radius <= 0 || this.x + radius >= innerWidth) {
+            this.velocity.x = -this.velocity.x
+        }
+        if (this.y - radius <= 0 || this.y + radius >= innerHeight) {
+            this.velocity.y = -this.velocity.y
+        }
 
+        //mouse collision
+
+        if (getDistance(mouse.x, mouse.y, this.x, this.y) < circle2.radius && this.opacity < 0.5) {
+            this.opacity += 0.05;
+        } else if (this.opacity > 0) {
+            this.opacity -= 0.05;
+            this.opacity = Math.max(0, this.opacity);
+        }
 
         this.x += this.velocity.x;
         this.y += this.velocity.y;
@@ -148,6 +162,11 @@ function Particles(x, y, radius) {
     this.draw = () => {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        c.save();
+        c.globalAlpha = this.opacity;
+        c.fillStyle = this.color;
+        c.fill();
+        c.restore();
         c.strokeStyle = this.color;
         c.stroke();
         c.closePath();
@@ -161,7 +180,7 @@ let circle2 = new Particles(undefined, undefined, 10, 20);
 function init() {
     particles = [];
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
         let x = randomIntFromRange(radius, canvas.width - radius)
         let y = randomIntFromRange(radius, canvas.height - radius)
         var radius = Math.random() * 10;
