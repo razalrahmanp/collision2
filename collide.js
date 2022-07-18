@@ -138,14 +138,6 @@ function Particles(x, y, radius) {
                 console.log('has collided');
             }
         }
-
-        if (this.x - this.radius <= 0 || this.x + this.radius >= innerWidth) {
-            this.velocity.x = -this.velocity.x;
-        }
-
-        if (this.y - this.radius <= 0 || this.y + this.radius >= innerHeight) {
-            this.velocity.y = -this.velocity.y;
-        }
         this.x += this.velocity.x;
         this.y += this.velocity.y;
     };
@@ -160,40 +152,34 @@ function Particles(x, y, radius) {
     };
 }
 
+// Implementation
 let particles;
-
-let circle2 = new Particles(undefined, undefined, 25, 20);
+let circle2 = new Particles(undefined, undefined, 10, 20);
 
 function init() {
-
-
     particles = [];
 
-    for (let i = 0; i < 300; i++) {
-
-        var radius = Math.random() * 10 + 1;
-        let x = randomIntFromRange(radius, canvas.width - radius);
-        let y = randomIntFromRange(radius, canvas.height - radius);
-
-        /* Checking if the distance between the two circles is less than the radius of the two circles.
-        If it is, then it will change the x and y coordinates of the circle. */
-
-
+    for (let i = 0; i < 100; i++) {
+        const x = randomIntFromRange(radius, canvas.width - radius)
+        const y = randomIntFromRange(radius, canvas.height - radius)
+        var radius = Math.random() * 10;
         if (i !== 0) {
             for (let j = 0; j < particles.length; j++) {
                 if (getDistance(x, y, particles[j].x, particles[j].y) - radius * 2 < 0) {
-                    x = randomIntFromRange(radius, canvas.width - radius);
-                    y = randomIntFromRange(radius, canvas.height - radius);
+                    x = randomIntFromRange(radius, canvas.width - radius)
+                    y = randomIntFromRange(radius, canvas.height - radius)
+
                     j = -1;
+
                 }
+
             }
         }
 
-        particles.push(new Particles(x, y, radius));
+
+        particles.push(new Particles(x, y, radius, ));
 
     }
-
-
 }
 
 
@@ -204,8 +190,8 @@ function animate() {
 
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    particles.forEach(particles => {
-        particles.update(particles);
+    particles.forEach(Particles => {
+        Particles.update(particles);
     });
     circle2.x = mouse.x;
     circle2.y = mouse.y;
