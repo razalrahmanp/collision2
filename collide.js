@@ -138,6 +138,8 @@ function Particles(x, y, radius) {
                 console.log('has collided');
             }
         }
+
+
         this.x += this.velocity.x;
         this.y += this.velocity.y;
     };
@@ -160,12 +162,13 @@ function init() {
     particles = [];
 
     for (let i = 0; i < 100; i++) {
-        const x = randomIntFromRange(radius, canvas.width - radius)
-        const y = randomIntFromRange(radius, canvas.height - radius)
+        let x = randomIntFromRange(radius, canvas.width - radius)
+        let y = randomIntFromRange(radius, canvas.height - radius)
         var radius = Math.random() * 10;
         if (i !== 0) {
             for (let j = 0; j < particles.length; j++) {
                 if (getDistance(x, y, particles[j].x, particles[j].y) - radius * 2 < 0) {
+
                     x = randomIntFromRange(radius, canvas.width - radius)
                     y = randomIntFromRange(radius, canvas.height - radius)
 
